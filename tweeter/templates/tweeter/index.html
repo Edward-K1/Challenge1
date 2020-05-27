@@ -2,10 +2,69 @@
 {% block title %} Interview Exercise {% endblock %}
 
 {% block content %}
-This is the body
+<div id="parent-div">
 
-<div id="series_chart_div" style="width: 900px; height: 500px;"></div>
+    <div id="tweet_sources_div" ></div>
+    <div id="tweet_languages_div" ></div>
+
+</div>
+
+<script>
+var sources = "{{sources|escapejs}}".replace(/[{}"']/g,"").split(",");
+var languages = "{{languages|escapejs}}".replace(/[{}"']/g,"").split(",");
+var sourcesObject = {};
+var languagesObject = {};
+
+sources.map(item => {
+    let separated = item.split(":");
+    sourcesObject[separated[0]]  = parseInt(separated[1]);
+});
+
+languages.map(item => {
+    let separated = item.split(":");
+    languagesObject[separated[0]]  = parseInt(separated[1]);
+})
+
+google.charts.load('current', {'packages':['corechart']});
+
+// Set a callback to run when the Google Visualization API is loaded.
+google.charts.setOnLoadCallback(drawCharts);
+
+
+function drawCharts() {
+  var data = new google.visualization.DataTable();
+  var langData = new google.visualization.DataTable();
+
+  data.addColumn('string', 'Web Devices');
+  data.addColumn('number', 'Count');
+
+  langData.addColumn('string','Languages');
+  langData.addColumn('number','TweetCount');
+
+  for (var key in sourcesObject) {
+      data.addRows([[key, sourcesObject[key]]])    
+  }
+
+  for (var key in languagesObject) {
+      langData.addRows([[key, languagesObject[key]]]);    
+  }
+  
+  var sourcesOptions = {'title':'Tweet Sources',
+                 'width':800,
+                 'height':500};
+
+ var languageOptions = {'title':'Tweet Languages',
+                        'width': 800,
+                        'height': 700};
+
+  // Instantiate and draw our chart, passing in some options.
+  var chart1 = new google.visualization.PieChart(document.getElementById('tweet_sources_div'));
+  chart1.draw(data, sourcesOptions);
+
+  var chart2 = new google.visualization.PieChart(document.getElementById('tweet_languages_div'));
+  chart2.draw(langData, languageOptions);
+}
+
+</script>
 
 {% endblock %}
-
-  
