@@ -15,10 +15,10 @@ def index(request):
     password = os.getenv('TPASSWORD')
     url = os.getenv('TWEETS_URL')
 
-    # raw_data = requests.get(url, auth=(username,password))
-    raw_data = get_pickled_data()
-    # data = format_tweet_data(raw_data.json())
-    data = format_tweet_data(raw_data)
+    raw_data = requests.get(url, auth=(username,password))
+    # raw_data = get_pickled_data()
+    data = format_tweet_data(raw_data.json())
+    # data = format_tweet_data(raw_data)
     tweet_stats = get_tweet_statistics(data)
 
     context = {"tweets": data, "languages":tweet_stats[0],"sources":tweet_stats[1]}
@@ -60,7 +60,6 @@ def get_tweet_statistics(tweet_data):
     unique_sources = set(tweet_sources)
     source_stats = {x: tweet_sources.count(x) for x in tweet_sources}
     stats = language_stats, source_stats
-    # stats = [json.dumps(language_stats),json.dumps(source_stats)]
 
     return stats
 
