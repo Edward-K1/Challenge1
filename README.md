@@ -15,3 +15,4 @@ Challenge to Analyse Tweets from a Certain API
  - Rename the `.env.example` file to `.env` and fill in the respective values
  - Install the requirements: ```$ pip install -r requirement.txt```
  - Run the application: ```python manage.py runserver```
+ - Navigate to `localhost:8000` in your browser
